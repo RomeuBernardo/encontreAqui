@@ -1,93 +1,51 @@
-import React, { useState } from "react";
-import styles from "./Login.module.css";
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
+import { Button } from 'primereact/button';
+import 'primeflex/primeflex.css';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
-function Login() {
-  // Correção: Usando useState para inicializar o estado
-  const [dadosFormulario, setDadosFormulario] = useState({
-    username: "",
-    password: "",
+const schema = yup.object().shape({
+  email: yup.string().email('Email inválido').required('Email é obrigatório'),
+  password: yup.string().min(6, 'A senha deve ter pelo menos 6 caracteres').required('Senha é obrigatória')
+});
+
+const Login = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
   });
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Obter os valores dos campos de entrada
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("senha").value;
-    console.log(username, password);
-
-    // Fazer a solicitação POST para o backend
-    fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao fazer login");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        // Faça algo com os dados do usuário logado, como redirecionar para outra página
-      })
-      .catch((error) => {
-        console.error("Erro:", error);
-        // Trate o erro, exiba uma mensagem de erro, etc.
-      });
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
-    <div
-      className="container-login"
-      style={{ backgroundColor: "var(--primary)" }}
-    >
-      <div
-        style={{
-          maxWidth: "100%",
-          height: "50px",
-          backgroundColor: "var(--primary)",
-          color: "white",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
-        }}
-      >
-        <span style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-          Vaquinha Online
-        </span>
-      </div>
-      <div className={styles.content_form}>
-        <form action="">
-          <label htmlFor="username">E-mail</label>
-          <input
-            type="email"
-            name="username"
-            id="username"
-            placeholder="Insira seu e-mail ou username"
-          />
-          <label htmlFor="Senha">Senha</label>
-          <input
-            type="password"
-            name="senha"
-            id="senha"
-            placeholder="Insira a senha"
-          />
-          <button
-            type="submit"
-            className={styles.button_login}
-            onClick={(e) => {
-              handleLogin(e);
-            }}
-          >
-            Entrar
-          </button>
+    <div className="p-d-flex p-jc-center p-ai-center p-mt-6" style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#f4f4f4' }}>
+      <div className="p-card p-p-4 p-shadow-5" style={{ width: '100%', maxWidth: '500px', background: 'white', borderRadius: '10px' }}>
+        <h2 className="p-text-center" style={{ textAlign: 'center' }}>Login</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+          <div className="p-field p-mb-3" style={{ paddingLeft: '5px' }}>
+            <label htmlFor="email" style={{ marginLeft: '5px' }}>Email</label>
+            <InputText id="email" {...register('email')} className={errors.email ? 'p-invalid' : ''} style={{ width: '100%', borderRadius: '5px', border: '1px solid #ced4da', boxShadow: 'none' }} />
+            {errors.email && <small className="p-error">{errors.email.message}</small>}
+          </div>
+          <div className="p-field p-mb-3" style={{ paddingLeft: '5px' }}>
+            <label htmlFor="password" style={{ marginLeft: '5px' }}>Senha</label>
+            <Password id="password" {...register('password')} feedback={false} className={errors.password ? 'p-invalid' : ''} inputStyle={{ width: '100%', borderRadius: '5px', border: '1px solid #ced4da', boxShadow: 'none' }} />
+            {errors.password && <small className="p-error">{errors.password.message}</small>}
+          </div>
+          <div className="p-d-flex p-jc-center" style={{ marginBottom: '1rem', textAlign: 'center', marginTop:'15px' }}>
+            <Button type="submit" label="Login" className="p-button-rounded p-button-primary" style={{ width: '100px' }} />
+          </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

@@ -15,3 +15,18 @@
   padding: 0;
   box-sizing: border-box;
 }
+.p-menubar-button{
+  height: 60px !important;
+}
+.p-menubar{
+  height: 60px !important;
+
+}
+.p-menuitem-icon {
+  margin: 10px  !important;
+  margin-left: 30px !important;
+  
+}
+.p-menuitem-link{
+  margin-left: 70px !important;
+}
