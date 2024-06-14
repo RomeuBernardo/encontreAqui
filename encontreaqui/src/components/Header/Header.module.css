@@ -1,0 +1,20 @@
+/* src/components/Menu.css */
+.menu-container {
+  width: 100%; /* Set the width to 100% */
+  padding: 10px; /* Add some padding */
+  max-height: 900px;
+  z-index: 999999999999999 !important;
+}
+
+.p-menubar {
+  width: 100%; /* Set the width to 100% */
+}
+
+.p-menu-list {
+  display: flex;
+  justify-content: space-between; /* Add space between menu items */
+}
+
+.p-menuitem {
+  padding: 0 10px; /* Add padding to menu items */
+}
